@@ -7,12 +7,10 @@ import com.exam.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -36,9 +34,37 @@ public class UserController {
         userRole.setRole(role);
         roles.add(userRole);
         userService.createUser(user, roles);
-        return new ResponseEntity(user, HttpStatus.OK);
+        return new ResponseEntity(user, HttpStatus.CREATED);
     }
 
+
+    @GetMapping("/{username}")
+    public ResponseEntity getUserByUsername(@PathVariable("username") String username){
+        User savedUser = userService.findByUsername(username);
+        return new ResponseEntity(savedUser,HttpStatus.OK);
+    }
+
+
+    @GetMapping("/")
+    public ResponseEntity getAllUser(){
+        List<User> allUsers = this.userService.getAllUsers();
+        return new ResponseEntity(allUsers,HttpStatus.OK);
+    }
+
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity deleteUser(@PathVariable Long userId){
+        userService.deleteUser(userId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PutMapping("{userId}")
+    public ResponseEntity updateUser(@PathVariable Long userId, @RequestBody User user) throws Exception {
+
+        User updatedUser = this.userService.updateUser(userId, user);
+        return new ResponseEntity(updatedUser,HttpStatus.OK);
+
+    }
 
 
 }
