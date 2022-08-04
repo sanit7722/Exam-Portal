@@ -72,11 +72,9 @@ public class UserServiceImpl implements UserService {
        user.setPassword(newUser.getPassword());
        user.setPhone(newUser.getPhone());
 
+        User savedUser = this.userRepo.save(user);
 
 
-
-
-
-        return null;
+        return savedUser;
     }
 }
